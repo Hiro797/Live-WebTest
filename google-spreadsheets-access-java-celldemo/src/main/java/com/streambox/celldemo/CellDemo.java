@@ -1,3 +1,5 @@
+package com.streambox.celldemo;
+
 /* Copyright (c) 2008 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,9 +14,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-package sample.spreadsheet.cell;
 
 import sample.util.SimpleCommandLineParser;
 import com.google.gdata.client.spreadsheet.CellQuery;
@@ -44,8 +43,8 @@ import java.util.List;
  * Using this demo, you can see how GData can read and write to individual cells
  * based on their position or send a batch of update commands in one HTTP
  * request.
- * 
- * Usage: java CellDemo --username [user] --password [pass] 
+ *
+ * Usage: java CellDemo --username [user] --password [pass]
  */
 public class CellDemo {
 
@@ -87,7 +86,7 @@ public class CellDemo {
   /**
    * Constructs a cell demo from the specified spreadsheet service, which is
    * used to authenticate to and access Google Spreadsheets.
-   * 
+   *
    * @param service the connection to the Google Spradsheets service.
    * @param outputStream a handle for stdout.
    */
@@ -99,7 +98,7 @@ public class CellDemo {
 
   /**
    * Log in to Google, under the Google Spreadsheets account.
-   * 
+   *
    * @param username name of user to authenticate (e.g. yourname@gmail.com)
    * @param password password to use for authentication
    * @throws AuthenticationException if the service is unable to validate the
@@ -116,7 +115,7 @@ public class CellDemo {
    * Displays the given list of entries and prompts the user to select the index
    * of one of the entries. NOTE: The displayed index is 1-based and is
    * converted to 0-based before being returned.
-   * 
+   *
    * @param reader to read input from the keyboard
    * @param entries the list of entries to display
    * @param type describes the type of things the list contains
@@ -151,13 +150,13 @@ public class CellDemo {
    * Uses the user's credentials to get a list of spreadsheets. Then asks the
    * user which spreadsheet to load. If the selected spreadsheet has multiple
    * worksheets then the user will also be prompted to select what sheet to use.
-   * 
+   *
    * @param reader to read input from the keyboard
    * @throws ServiceException when the request causes an error in the Google
    *         Spreadsheets service.
    * @throws IOException when an error occurs in communication with the Google
    *         Spreadsheets service.
-   * 
+   *
    */
   public void loadSheet(BufferedReader reader) throws IOException,
       ServiceException {
@@ -165,7 +164,7 @@ public class CellDemo {
     SpreadsheetFeed feed = service.getFeed(factory.getSpreadsheetsFeedUrl(),
         SpreadsheetFeed.class);
     List spreadsheets = feed.getEntries();
-    int spreadsheetIndex = getIndexFromUser(reader, spreadsheets, 
+    int spreadsheetIndex = getIndexFromUser(reader, spreadsheets,
         "spreadsheet");
     SpreadsheetEntry spreadsheet = feed.getEntries().get(spreadsheetIndex);
 
@@ -184,7 +183,7 @@ public class CellDemo {
 
   /**
    * Sets the particular cell at row, col to the specified formula or value.
-   * 
+   *
    * @param row the row number, starting with 1
    * @param col the column number, starting with 1
    * @param formulaOrValue the value if it doesn't start with an '=' sign; if it
@@ -205,7 +204,7 @@ public class CellDemo {
 
   /**
    * Prints out the specified cell.
-   * 
+   *
    * @param cell the cell to print
    */
   public void printCell(CellEntry cell) {
@@ -218,7 +217,7 @@ public class CellDemo {
 
   /**
    * Shows all cells that are in the spreadsheet.
-   * 
+   *
    * @throws ServiceException when the request causes an error in the Google
    *         Spreadsheets service.
    * @throws IOException when an error occurs in communication with the Google
@@ -235,7 +234,7 @@ public class CellDemo {
   /**
    * Shows a particular range of cells, limited by minimum/maximum rows and
    * columns.
-   * 
+   *
    * @param minRow the minimum row, inclusive, 1-based
    * @param maxRow the maximum row, inclusive, 1-based
    * @param minCol the minimum column, inclusive, 1-based
@@ -261,7 +260,7 @@ public class CellDemo {
 
   /**
    * Performs a full-text search on cells.
-   * 
+   *
    * @param fullTextSearchString a full text search string, with space-separated
    *        keywords
    * @throws ServiceException when the request causes an error in the Google
@@ -285,7 +284,7 @@ public class CellDemo {
   /**
    * Writes (to stdout) a list of the entries in the batch request in a human
    * readable format.
-   * 
+   *
    * @param batchRequest the CellFeed containing entries to display.
    */
   private void printBatchRequest(CellFeed batchRequest) {
@@ -304,11 +303,11 @@ public class CellDemo {
    * server to update the specified cell with the given value. The entry is
    * fetched from the server in order to get the current edit link (for
    * optimistic concurrency).
-   * 
+   *
    * @param row the row number of the cell to operate on
    * @param col the column number of the cell to operate on
    * @param value the value to set in case of an update the cell to operate on
-   * 
+   *
    * @throws ServiceException when the request causes an error in the Google
    *         Spreadsheets service.
    * @throws IOException when an error occurs in communication with the Google
@@ -329,15 +328,15 @@ public class CellDemo {
   /**
    * Prompts the user for a set of operations and submits them in a batch
    * request.
-   * 
+   *
    * @param reader to read input from the keyboard.
-   * 
+   *
    * @throws ServiceException when the request causes an error in the Google
    *         Spreadsheets service.
    * @throws IOException when an error occurs in communication with the Google
    *         Spreadsheets service.
    */
-  public void processBatchRequest(BufferedReader reader) 
+  public void processBatchRequest(BufferedReader reader)
       throws IOException, ServiceException {
 
     final String BATCH_PROMPT = "Enter set operations one by one, "
@@ -397,7 +396,7 @@ public class CellDemo {
 
   /**
    * Reads and executes one command.
-   * 
+   *
    * @param reader to read input from the keyboard
    * @return false if the user quits, true on exception
    */
@@ -444,7 +443,7 @@ public class CellDemo {
 
   /**
    * Starts up the demo and prompts for commands.
-   * 
+   *
    * @param username name of user to authenticate (e.g. yourname@gmail.com)
    * @param password password to use for authentication
    * @throws AuthenticationException if the service is unable to validate the
@@ -475,7 +474,7 @@ public class CellDemo {
 
   /**
    * Runs the demo.
-   * 
+   *
    * @param args the command-line arguments
    * @throws AuthenticationException if the service is unable to validate the
    *         username and password.
@@ -491,11 +490,43 @@ public class CellDemo {
       System.exit(1);
     }
 
+    SpreadsheetService service = new SpreadsheetService("Cell Demo");
+    service.setUserCredentials(username,password);
+    
+    FeedURLFactory urlFactory = FeedURLFactory.getDefault();
+    SpreadsheetQuery spreadsheetQuery = new SpreadsheetQuery(urlFactory.getSpreadsheetsFeedUrl());
+    
+    SpreadsheetQuery.setTitleQuery("xpath for live/es");  //Set the name of spreadsheet which we would like to use
+    SpreadsheetFeed spreadsheetFeed = service.query(spreadsheetQuery,SpreadsheetFeed.class);
+    
+    SpreadsheetEntry spreadsheetEntry = spreadsheetFeed.getEntries().get(0);
+    
+    System.out.println("Name:" + spreadsheetEntry.getTitle().getPlainText());
+    
+    //get worksheet which I am looking for
+    WorksheetEntry worlsheetEntry = spreadsheetEntry.getDefaultWorksheet();
+    
+    
+    //Seraching  inside wirksheet
+    
+    ListQuery listQuery = new ListQuery(worksheetEntry.getListFeedUrl());
+    listQuery.setSpreadsheetQuery("label");
+    ListFeed listFeed = service.query(listQuery,ListFeed.class);
+    ListEntry listEntry - listFeed.getEntries().get(0);
+    CustomElementCollection elements = listEntry.getCustomElements();
+    System.out.println("Refer to:   " + elements.getVlue("esls type"));
+    
+    
+    
+    
+    /*
     CellDemo demo = new CellDemo(new SpreadsheetService("Cell Demo"),
         System.out);
 
     demo.run(username, password);
-  }
+  */
+  
+  }//end of main
 
   /**
    * Prints out the usage.
