@@ -15,9 +15,23 @@ package com.streambox.celldemo;
  * limitations under the License.
  */
 
-import sample.util.SimpleCommandLineParser;
+import com.google.common.util.concurrent.*;
+import com.google.common.util.concurrent.Service;
+import com.google.gdata.client.*;
+import com.google.gdata.client.spreadsheet.*;
+import com.sun.media.jai.codecimpl.util.*;
+import com.sun.xml.internal.ws.wsdl.writer.document.*;
+
+
+
+import javax.mail.*;
+import javax.security.*;
+
+import com.streambox.celldemo.SimpleCommandLineParser;
 import com.google.gdata.client.spreadsheet.CellQuery;
 import com.google.gdata.client.spreadsheet.FeedURLFactory;
+import com.google.gdata.client.spreadsheet.ListQuery;
+import com.google.gdata.client.spreadsheet.SpreadsheetQuery;
 import com.google.gdata.client.spreadsheet.SpreadsheetService;
 import com.google.gdata.data.BaseEntry;
 import com.google.gdata.data.Link;
@@ -26,6 +40,9 @@ import com.google.gdata.data.batch.BatchStatus;
 import com.google.gdata.data.batch.BatchUtils;
 import com.google.gdata.data.spreadsheet.CellEntry;
 import com.google.gdata.data.spreadsheet.CellFeed;
+import com.google.gdata.data.spreadsheet.CustomElementCollection;
+import com.google.gdata.data.spreadsheet.ListEntry;
+import com.google.gdata.data.spreadsheet.ListFeed;
 import com.google.gdata.data.spreadsheet.SpreadsheetEntry;
 import com.google.gdata.data.spreadsheet.SpreadsheetFeed;
 import com.google.gdata.data.spreadsheet.WorksheetEntry;
@@ -161,16 +178,16 @@ public class CellDemo {
   public void loadSheet(BufferedReader reader) throws IOException,
       ServiceException {
     // Get the spreadsheet to load
-    SpreadsheetFeed feed = service.getFeed(factory.getSpreadsheetsFeedUrl(),
+    SpreadsheetFeed feed = (SpreadsheetFeed) service.getFeed(factory.getSpreadsheetsFeedUrl(),
         SpreadsheetFeed.class);
     List spreadsheets = feed.getEntries();
     int spreadsheetIndex = getIndexFromUser(reader, spreadsheets,
         "spreadsheet");
-    SpreadsheetEntry spreadsheet = feed.getEntries().get(spreadsheetIndex);
+    SpreadsheetEntry spreadsheet = (SpreadsheetEntry) feed.getEntries().get(spreadsheetIndex);
 
     // Get the worksheet to load
     if (spreadsheet.getWorksheets().size() == 1) {
-      cellFeedUrl = spreadsheet.getWorksheets().get(0).getCellFeedUrl();
+      cellFeedUrl = ((WorksheetEntry) spreadsheet.getWorksheets().get(0)).getCellFeedUrl();
     } else {
       List worksheets = spreadsheet.getWorksheets();
       int worksheetIndex = getIndexFromUser(reader, worksheets, "worksheet");
@@ -224,7 +241,7 @@ public class CellDemo {
    *         Spreadsheets service.
    */
   public void showAllCells() throws IOException, ServiceException {
-    CellFeed feed = service.getFeed(cellFeedUrl, CellFeed.class);
+    CellFeed feed = (CellFeed) service.getFeed(cellFeedUrl, CellFeed.class);
 
     for (CellEntry entry : feed.getEntries()) {
       printCell(entry);
@@ -476,14 +493,18 @@ public class CellDemo {
    * Runs the demo.
    *
    * @param args the command-line arguments
-   * @throws AuthenticationException if the service is unable to validate the
-   *         username and password.
+ * @throws ServiceException 
+ * @throws IOException 
    */
-  public static void main(String[] args) throws AuthenticationException {
-     SimpleCommandLineParser parser = new SimpleCommandLineParser(args);
-	    String username = parser.getValue("username", "user", "u");
-	    String password = parser.getValue("password", "pass", "p");
-	    	    
+  public static void main(String[] args) throws IOException, ServiceException {
+    
+	  SimpleCommandLineParser parser = new SimpleCommandLineParser(args);
+	    //String username = parser.getValue("username", "user", "u");
+	    //String password = parser.getValue("password", "pass", "p");
+	    String username = "hiro.nakasuji@streambox.com";
+	    String password = "Streamwolf70";
+	    
+	    
 	    //boolean help = parser.containsKey("help", "h");
 
 	    if (username == null || password == null) {
@@ -511,13 +532,39 @@ public class CellDemo {
 	    
 	    //Seraching  inside wirksheet
 	    
+	    
 	    ListQuery listQuery = new ListQuery(worksheetEntry.getListFeedUrl());
-	    listQuery.setSpreadsheetQuery("  ");
+	    int rowCount=1;
+	    listQuery.setStartIndex(rowCount);
+	    listQuery.setMaxResults(1);
+	    ListFeed listFeed = service.query(listQuery, ListFeed.class);
+	    List<ListEntry> entries = listFeed.getEntries();
+	    
+	    ListEntry listEntry = entries.get(0);
+	    listEntry.delete();
+	    
+	    Service s=null;
+	    /*
+	    ListQuery listQuery = new ListQuery(worksheetEntry.getListFeedUrl());
+	    listQuery.setSpreadsheetQuery("a");
 	    
 	    ListFeed listFeed = service.query(listQuery,ListFeed.class);
-	    ListEntry listEntry = listFeed.getEntries().get(0);
+	    ListEntry listEntry = listFeed.getEntries().get(1);
 	    CustomElementCollection elements = listEntry.getCustomElements();
-	    System.out.println("Refer to:   " + elements.getValue("esls type"));    /*
+	    System.out.println("Refer to:   " + elements.getValue("esls type"));
+	  	  
+	  
+	  /*
+	  SimpleCommandLineParser parser = new SimpleCommandLineParser(args);
+    String username = parser.getValue("username", "user", "u");
+    String password = parser.getValue("password", "pass", "p");
+    boolean help = parser.containsKey("help", "h");
+
+    if (help || username == null || password == null) {
+      usage();
+      System.exit(1);
+    }
+
     CellDemo demo = new CellDemo(new SpreadsheetService("Cell Demo"),
         System.out);
 
