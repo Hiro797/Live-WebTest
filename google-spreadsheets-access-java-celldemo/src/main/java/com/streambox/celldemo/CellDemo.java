@@ -480,46 +480,44 @@ public class CellDemo {
    *         username and password.
    */
   public static void main(String[] args) throws AuthenticationException {
-    SimpleCommandLineParser parser = new SimpleCommandLineParser(args);
-    String username = parser.getValue("username", "user", "u");
-    String password = parser.getValue("password", "pass", "p");
-    boolean help = parser.containsKey("help", "h");
+     SimpleCommandLineParser parser = new SimpleCommandLineParser(args);
+	    String username = parser.getValue("username", "user", "u");
+	    String password = parser.getValue("password", "pass", "p");
+	    	    
+	    //boolean help = parser.containsKey("help", "h");
 
-    if (help || username == null || password == null) {
-      usage();
-      System.exit(1);
-    }
+	    if (username == null || password == null) {
+	      usage();
+	      System.exit(1);
+	    }
 
-    SpreadsheetService service = new SpreadsheetService("Cell Demo");
-    service.setUserCredentials(username,password);
-    
-    FeedURLFactory urlFactory = FeedURLFactory.getDefault();
-    SpreadsheetQuery spreadsheetQuery = new SpreadsheetQuery(urlFactory.getSpreadsheetsFeedUrl());
-    
-    SpreadsheetQuery.setTitleQuery("xpath for live/es");  //Set the name of spreadsheet which we would like to use
-    SpreadsheetFeed spreadsheetFeed = service.query(spreadsheetQuery,SpreadsheetFeed.class);
-    
-    SpreadsheetEntry spreadsheetEntry = spreadsheetFeed.getEntries().get(0);
-    
-    System.out.println("Name:" + spreadsheetEntry.getTitle().getPlainText());
-    
-    //get worksheet which I am looking for
-    WorksheetEntry worlsheetEntry = spreadsheetEntry.getDefaultWorksheet();
-    
-    
-    //Seraching  inside wirksheet
-    
-    ListQuery listQuery = new ListQuery(worksheetEntry.getListFeedUrl());
-    listQuery.setSpreadsheetQuery("label");
-    ListFeed listFeed = service.query(listQuery,ListFeed.class);
-    ListEntry listEntry - listFeed.getEntries().get(0);
-    CustomElementCollection elements = listEntry.getCustomElements();
-    System.out.println("Refer to:   " + elements.getVlue("esls type"));
-    
-    
-    
-    
-    /*
+	    SpreadsheetService service = new SpreadsheetService("Cell Demo");
+	    service.setUserCredentials(username,password);
+	    
+	    
+	    FeedURLFactory urlFactory = FeedURLFactory.getDefault();
+	    SpreadsheetQuery spreadsheetQuery = new SpreadsheetQuery(urlFactory.getSpreadsheetsFeedUrl());
+	    
+	    spreadsheetQuery.setTitleQuery("xpath for live/es");  //Set the name of spreadsheet which we would like to use
+	    SpreadsheetFeed spreadsheetFeed = service.query(spreadsheetQuery,SpreadsheetFeed.class);
+	    
+	    SpreadsheetEntry spreadsheetEntry = spreadsheetFeed.getEntries().get(0);
+	    
+	    System.out.println("Name:" + spreadsheetEntry.getTitle().getPlainText());
+	    
+	    //get worksheet which I am looking for
+	    WorksheetEntry worksheetEntry = spreadsheetEntry.getDefaultWorksheet();
+	    
+	    
+	    //Seraching  inside wirksheet
+	    
+	    ListQuery listQuery = new ListQuery(worksheetEntry.getListFeedUrl());
+	    listQuery.setSpreadsheetQuery("  ");
+	    
+	    ListFeed listFeed = service.query(listQuery,ListFeed.class);
+	    ListEntry listEntry = listFeed.getEntries().get(0);
+	    CustomElementCollection elements = listEntry.getCustomElements();
+	    System.out.println("Refer to:   " + elements.getValue("esls type"));    /*
     CellDemo demo = new CellDemo(new SpreadsheetService("Cell Demo"),
         System.out);
 
