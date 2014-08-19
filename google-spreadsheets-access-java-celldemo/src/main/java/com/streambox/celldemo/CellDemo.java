@@ -501,8 +501,8 @@ public class CellDemo {
 	  SimpleCommandLineParser parser = new SimpleCommandLineParser(args);
 	    //String username = parser.getValue("username", "user", "u");
 	    //String password = parser.getValue("password", "pass", "p");
-	    String username = "hiro.nakasuji@streambox.com";
-	    String password = "Streamwolf70";
+	    String username = "";
+	    String password = "";
 	    
 	    
 	    //boolean help = parser.containsKey("help", "h");
